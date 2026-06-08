@@ -1,5 +1,5 @@
-const puppeteer = require('puppeteer'); // Importa a biblioteca Puppeteer para controle do navegador
-const fs = require('fs'); // Define as URLs a serem monitoradas, com seus respectivos nomes, textos de exibição e limites de tempo em milissegundos
+const puppeteer = require('puppeteer');
+const fs = require('fs'); 
 
 const urls = [
     {
@@ -23,25 +23,24 @@ const urls = [
 ];
 
 async function monitorarPerformance(item, browser) {
-    const page = await browser.newPage(); // Abre uma nova página no navegador para cada monitoramento
-    const inicio =  Date.now(); // Registra o tempo de início do monitoramento;
-
+    const page = await browser.newPage(); 
+    const inicio =  Date.now();
     try {
         await page.goto(item.url, { 
         waitUntil: 'networkidle2', 
         timeout: 30000 
-        }); // Navega para a URL e espera até que a rede esteja ociosa
+        });
 
-        const tempoCarregamento = Date.now() - inicio; // Calcula o tempo de carregamento
-        const conteudo = await page.content(); // Obtém o conteúdo da página
-        const localizaTexto = conteudo.includes(item.WaitingText); // Verifica se o texto esperado está presente no conteúdo da página
-        const status = tempoCarregamento <= item.limiteMs && localizaTexto ? 'OK' : 'ALERTA'; // Determina o status com base no tempo de carregamento e na presença do texto
+        const tempoCarregamento = Date.now() - inicio; 
+        const conteudo = await page.content(); 
+        const localizaTexto = conteudo.includes(item.WaitingText); 
+        const status = tempoCarregamento <= item.limiteMs && localizaTexto ? 'OK' : 'ALERTA'; 
         const resultado = {
             nome: item.nome,
             url: item.url,
             tempoCarregamento,
             status
-        }; // Cria um objeto com os resultados do monitoramento
+        }; 
 
         if (status === 'ALERTA') {
             console.table([resultado]);
@@ -51,20 +50,19 @@ async function monitorarPerformance(item, browser) {
         
         
 
-        await page.close(); // Fecha a página após o monitoramento
-        return resultado; // Retorna o resultado do monitoramento
+        await page.close(); 
+        return resultado; 
     } catch (error) {
         console.error(`Erro ao monitorar ${item.nome}:`, error);
-        await page.close(); // Fecha a página em caso de erro
-        throw error; // Re-lança o erro para ser tratado pelo chamador
+        await page.close(); 
+        throw error; 
     }           
 }
 
 async function executarMonitoramento() {
     const browser = await puppeteer.launch({
       headless: true
-    }); // Inicia o navegador em modo headless (sem interface gráfica)
-
+    });
     const resultados = [];
 
     for (const item of urls) {
@@ -72,8 +70,8 @@ async function executarMonitoramento() {
         resultados.push(resultado);
     }
 
-    await browser.close(); // Fecha o navegador após o monitoramento
-    fs.writeFileSync('resultados.json', JSON.stringify(resultados, null, 2)); // Salva os resultados em um arquivo JSON
+    await browser.close();
+    fs.writeFileSync('resultados.json', JSON.stringify(resultados, null, 2)); 
     console.log('Monitoramento concluído. Resultados salvos em resultados.json');
 }
 
