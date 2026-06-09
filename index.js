@@ -11,13 +11,13 @@ const urls = [
     {
         nome: 'dashboard',
         url: 'http://127.0.0.1:3000/dashboard',
-        WaitingText: 'Exibindo a Dashboard',
+        WaitingText: 'Exibindo a Dashboards',
         limiteMs: 3000
     },
     {
         nome: 'user',
         url: 'http://127.0.0.1:3000/user',
-        WaitingText: 'Exibindo o user',
+        WaitingText: 'Exibindo o users',
         limiteMs: 3000
     }
 ];
@@ -59,7 +59,7 @@ async function monitorarPerformance(item, browser) {
     }           
 }
 
-async function executarMonitoramentos() {
+async function executarMonitoramento() {
     const browser = await puppeteer.launch({
       headless: true
     });
@@ -75,4 +75,4 @@ async function executarMonitoramentos() {
     console.log('Monitoramento concluído. Resultados salvos em resultados.json');
 }
 
-executarMonitoramentos();
+executarMonitoramento();
