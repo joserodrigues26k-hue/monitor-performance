@@ -59,7 +59,7 @@ async function monitorarPerformance(item, browser) {
     }           
 }
 
-async function executarMonitoramento() {
+async function executarMonitoramentos() {
     const browser = await puppeteer.launch({
       headless: true
     });
@@ -75,4 +75,4 @@ async function executarMonitoramento() {
     console.log('Monitoramento concluído. Resultados salvos em resultados.json');
 }
 
-executarMonitoramento();
+executarMonitoramentos();
